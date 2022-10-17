@@ -35,7 +35,9 @@ class DataHandler:
     @staticmethod
     def reduce_classes(img: PIL.Image) -> torch.Tensor:
         """Reduce set of classes from {1,2,3} to {0,1}"""
-        return torch.from_numpy((np.array(img) != 2).astype(np.uint8))
+        return torch.unsqueeze(
+            torch.from_numpy((np.array(img) != 2).astype(np.uint8)), 0
+        )
 
     def prepare_dataset(self):
         train = torchvision.datasets.OxfordIIITPet(
