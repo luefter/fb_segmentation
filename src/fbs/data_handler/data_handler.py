@@ -1,8 +1,8 @@
-from tkinter import Image
-import torch
-import torchvision
 import numpy as np
 import PIL
+import torch
+import torchvision
+from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision.transforms import (
     Compose,
@@ -15,6 +15,9 @@ from torchvision.transforms import (
 
 def remove_border(trimap: torch.Tensor):
     return (trimap != 2).astype(torch.uint8)
+
+
+liste = [1, 123, 234]
 
 
 class DataHandler:
