@@ -7,6 +7,7 @@ from torch import nn
 from fbs.data_handler import DataHandler
 from fbs.unet.unet_model import UNet
 
+# Hyperparameter
 EPOCH_COUNT = 5
 BATCH_SIZE = 4
 LEARNING_RATE = 0.001
@@ -58,18 +59,18 @@ def main():
                     running_train_loss = 0.0
 
         del outputs
+        # Test loop
+        for i, data in enumerate(testloader, 0):
+            # get the inputs; data is a list of [inputs, labels]
+            inputs, masks = data
+            inputs, masks = inputs.to(device), masks.to(device)
+            outputs = model(inputs)
 
-        # for i, data in enumerate(testloader, 0):
-        #     # get the inputs; data is a list of [inputs, labels]
-        #     inputs, masks = data
-        #     inputs, masks = inputs.to(device), masks.to(device)
-        #     outputs = model(inputs)
+            masks = torch.squeeze(masks, 1).type(torch.long)
 
-        #     masks = torch.squeeze((masks - 1), 1).type(torch.long)
+            loss = loss_function(outputs, masks)
 
-        #     loss = loss_function(outputs, masks)
-
-        #     running_test_loss += loss.item()
+            running_test_loss += loss.item()
 
         print(
             f"epoch: {epoch + 1} --- test loss: {running_test_loss / len(testloader):.3f}"
