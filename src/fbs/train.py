@@ -18,7 +18,7 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logger.info(f"Selceted {device} as training device")
-    model = UNet(3, 3).to(device).train()
+    model = UNet(3, 2).to(device).train()
     data_handler = DataHandler()
     trainloader, testloader, _, _ = data_handler.prepare_dataloader(
         batch_size=BATCH_SIZE
@@ -40,7 +40,7 @@ def main():
             # forward + backward + optimize
             outputs = model(inputs)
 
-            masks = torch.squeeze((masks - 1), 1).type(torch.long)
+            masks = torch.squeeze(masks, 1).type(torch.long)
 
             loss = loss_function(outputs, masks)
 

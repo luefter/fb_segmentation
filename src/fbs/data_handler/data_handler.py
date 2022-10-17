@@ -1,5 +1,8 @@
+from tkinter import Image
 import torch
 import torchvision
+import numpy as np
+import PIL
 from torch.utils.data import DataLoader
 from torchvision.transforms import (
     Compose,
@@ -29,8 +32,10 @@ class DataHandler:
             test_size,
         )
 
-    def prepare_transformer(self):
-        raise NotImplementedError
+    @staticmethod
+    def reduce_classes(img: PIL.Image) -> torch.Tensor:
+        """Reduce set of classes from {1,2,3} to {0,1}"""
+        return torch.from_numpy((np.array(img) != 2).astype(np.uint8))
 
     def prepare_dataset(self):
         train = torchvision.datasets.OxfordIIITPet(
@@ -46,7 +51,7 @@ class DataHandler:
             ),
             target_transform=Compose(
                 [
-                    PILToTensor(),
+                    self.reduce_classes,
                     Resize((224, 224), InterpolationMode.NEAREST),
                 ]
             ),
@@ -65,7 +70,7 @@ class DataHandler:
             ),
             target_transform=Compose(
                 [
-                    PILToTensor(),
+                    self.reduce_classes,
                     Resize((224, 224), interpolation=InterpolationMode.NEAREST),
                 ]
             ),
