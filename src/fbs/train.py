@@ -4,7 +4,6 @@ import torch.optim as optim
 from loguru import logger
 from torch import nn
 
-from fbs.config import Config
 from fbs.data_handler import DataHandler
 from fbs.unet.unet_model import UNet
 
