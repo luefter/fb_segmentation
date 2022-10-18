@@ -40,7 +40,7 @@ def main():
     for epoch in range(1, EPOCH_COUNT + 1):
         model.train()
         epoch_loss = 0
-        for data in tqdm(train, total=n_train, desc=f"Epoch {epoch}/{EPOCH_COUNT}"):
+        for data in tqdm(train, total=len(train), desc=f"Epoch {epoch}/{EPOCH_COUNT}"):
             # get the inputs; data is a list of [inputs, labels]
             inputs, masks = data
             inputs, masks = inputs.to(device), masks.to(device)
@@ -64,7 +64,7 @@ def main():
         val_loss_records.append(val_loss)
         weights.append(model.state_dict())
         print(
-            f"Epoch:{epoch+1}, training loss: {epoch_loss}, validation loss: {val_loss}"
+            f"Epoch:{epoch}, training loss: {epoch_loss/len(train)}, validation loss: {val_loss/len(val)}"
         )
         if epoch > 3 and val_loss_records[-1] > val_loss_records[-3]:
             torch.save(weights[0], f"src/fbs/data/model_weights/model_{EPOCH_COUNT}")

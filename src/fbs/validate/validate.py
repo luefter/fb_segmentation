@@ -17,7 +17,7 @@ def validate(net, val, device):
 
         with torch.no_grad():
             pred = net(inputs)
-            loss = loss_funtion(pred, masks)
+            loss = loss_function(pred, masks)
             val_loss += loss.item()
 
     net.train()
