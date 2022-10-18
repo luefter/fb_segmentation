@@ -17,21 +17,27 @@ def remove_border(trimap: torch.Tensor):
     return (trimap != 2).astype(torch.uint8)
 
 
-liste = [1, 123, 234]
-
-
 class DataHandler:
     def __init__(self) -> None:
         self.data_dir = "src/fbs/data/"
         self.transforms = None
 
-    def prepare_dataloader(self, batch_size):
+    def prepare_dataloader(self, batch_size, val_split=0.1):
+
         train, test = self.prepare_dataset()
         train_size, test_size = len(train), len(test)
+        # split training data into train and validation set
+        n_val = int(train_size * val_split)
+        n_train = train_size - n_val
+        train_set, val_set = torch.utils.data.random_split(
+            train, [n_train, n_val], generator=torch.Generator().manual_seed(0)
+        )
+
         return (
-            DataLoader(train, batch_size=batch_size, shuffle=True),
+            DataLoader(train_set, batch_size=batch_size, shuffle=True),
+            DataLoader(val_set, batch_size=batch_size, shuffle=False, drop_last=True),
             DataLoader(test, batch_size=batch_size),
-            train_size,
+            n_train,
             test_size,
         )
 
