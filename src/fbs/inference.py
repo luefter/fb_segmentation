@@ -16,7 +16,7 @@ from torchvision.transforms import (
 )
 
 IMAGE_PATH = "src/fbs/data/oxford-iiit-pet/images/"
-MODEL_PATH = "src/fbs/data/model_weights/model_5"
+MODEL_PATH = "src/fbs/data/model_weights/model_9"
 EXAMPLES_PATH = "src/fbs/data/examples"
 
 

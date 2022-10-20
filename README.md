@@ -16,3 +16,7 @@ convert to 0,1 by (trimap != 2).astype(np.uint8)
 
 ## USAGE OF INFERENCE.PY
 python src/fbs/inference.py --img-name Abyssinian_2.jpg --save True
+
+
+## USAGE OF INFERENCE.PY
+python src/fbs/inference.py --img-name Abyssinian_2.jpg --save True
