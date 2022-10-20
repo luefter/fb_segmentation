@@ -11,7 +11,7 @@ from fbs.unet.unet_model import UNet
 from fbs.validate import validate
 
 # Hyperparameter
-EPOCH_COUNT = 5
+EPOCH_COUNT = 20
 BATCH_SIZE = 4
 LEARNING_RATE = 0.001
 VERBOSE = True
@@ -20,8 +20,14 @@ VERBOSE_BATCH_COUNT = 40
 
 def main():
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    logger.info(f"Selceted {device} as training device")
+    device = torch.device(
+        "cuda"
+        if torch.cuda.is_available()
+        else "mps"
+        if torch.backends.mps.is_available()
+        else "cpu"
+    )
+    logger.info(f"Selected {device} as training device")
     model = UNet(3, 2).to(device).train()
     data_handler = DataHandler()
 
@@ -66,9 +72,13 @@ def main():
         print(
             f"Epoch:{epoch}, training loss: {epoch_loss/len(train)}, validation loss: {val_loss/len(val)}"
         )
+        # early stopping with a delay of two epochs
         if epoch > 3 and val_loss_records[-1] > val_loss_records[-3]:
-            torch.save(weights[0], f"src/fbs/data/model_weights/model_{EPOCH_COUNT}")
+            torch.save(weights[0], f"src/fbs/data/model_weights/model_{EPOCH_COUNT-2}")
+            print(f"Training stopped after {epoch} Epochs")
             break
+        torch.save(weights[-1], f"src/fbs/data/model_weights/model_{EPOCH_COUNT}")
+    #return train_loss_records, val_loss_records
 
     #     # Test loop
     #     for i, data in enumerate(testloader, 0):
