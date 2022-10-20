@@ -74,7 +74,10 @@ def main():
             f"Epoch:{epoch}, training loss: {epoch_loss/len(train)}, validation loss: {val_loss/len(val)}"
         )
         # early stopping with a delay of two epochs
-        if epoch > 3 and val_loss_records[-1] > val_loss_records[-2] > val_loss_records[-3]:
+        if (
+            epoch > 3
+            and val_loss_records[-1] > val_loss_records[-2] > val_loss_records[-3]
+        ):
             torch.save(weights[0], f"src/fbs/data/model_weights/model_{epoch-2}")
             print(f"Training stopped after {epoch} Epochs")
             break
